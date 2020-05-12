@@ -2,18 +2,25 @@ import React from "react"
 import { Link } from "gatsby"
 import { Box, Text } from "rebass"
 import Layout from "../components/layout"
+import { PrintButton } from "../components/utility/print"
+import { Blurb as RedCross } from "../pages/service-providers/red-cross"
 
 /**
  * Explain to the user what rental assistance services they appear to be eligible for.
  */
 export default props => {
-  const { is_renter, housing_type, sources } = props
+  const { location } = props
+  const { state } = location
+  const { answers, sources } = state
+  const isRenter = answers ? answers.isRenter : false
+  const rentalHousingType = answers ? answers.rentalHousingType : null
   return (
     <Layout>
+      <PrintButton />
       <Box>
-        {is_renter ? <IsRenter sources={sources} /> : <IsNotRenter />}
+        {isRenter ? <IsRenter sources={sources} /> : <IsNotRenter />}
         <Box>
-          {housing_type === "public" ? (
+          {rentalHousingType === "public" ? (
             <Text>
               Please consider talking with your manager about a rent reduction.
             </Text>
@@ -58,15 +65,17 @@ const DescribeAssistanceSources = props => {
     <Box>
       <Text>
         Based on the answers you provided to our questions, we think you may be
-        able to seek rental assistance from the following organizations. Please
-        note that you will still need to visit and apply separately for
+        able to seek rental assistance from the following organizations.
+      </Text>
+      <Text>
+        Please note that you will still need to visit and apply separately for
         assistance at each organization.
       </Text>
-      <ul>
+      <Box>
         {sources.map(s => {
-          return <li> {s} </li>
+          return <ProviderBlurb key={s} provider={s} />
         })}
-      </ul>
+      </Box>
     </Box>
   )
 }
@@ -80,4 +89,18 @@ const NoAssistanceSourcesFound = props => {
       </Text>
     </Box>
   )
+}
+
+const getBlurb = provider => {
+  switch (provider) {
+    case "red-cross":
+      return <RedCross />
+    default:
+      return <></>
+  }
+}
+
+const ProviderBlurb = props => {
+  const { provider } = props
+  return <Box>{getBlurb(provider)}</Box>
 }

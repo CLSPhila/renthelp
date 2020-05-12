@@ -42,7 +42,7 @@ export const initialQuestions = {
   monthlyIncome: {
     answer: null,
   },
-  veteran: {
+  isVeteran: {
     answer: null,
   },
   involvedWithDHS: {
@@ -57,7 +57,7 @@ export const initialQuestions = {
   isImmigrant: {
     answer: null,
   },
-  recentFire: {
+  experiencedDisaster: {
     answer: null,
   },
 }
@@ -69,11 +69,20 @@ export const pickQuestion = (state, dispatch) => {
     return <questions.IsRenter questionId="isRenter" dispatch={dispatch} />
   }
   if (state.isRenter.answer === "no") {
-    return navigate("/results")
+    return navigate("/results", { state: { answers: state } })
+  }
+
+  if (state.rentalHousingType.answer === null) {
+    return (
+      <questions.RentalHousingType
+        questionId="rentalHousingType"
+        dispatch={dispatch}
+      />
+    )
   }
   try {
     let sources = collectEligibleSources(state)
-    return navigate("/results", { sources })
+    return navigate("/results", { state: { answers: state, sources } })
   } catch (err) {
     console.log("Error thrown")
     console.log(err)
@@ -91,13 +100,128 @@ const collectEligibleSources = state => {
   var sources = []
   console.log("collectEligibleSources")
   console.log(state)
+
+  // Germantown crisis ministry
   if (state.zipCode.answer === null) {
     throw {
       questionId: "zipCode",
       Component: questions.ZipCode,
     }
+  } else {
+    if (
+      germantownCrisisMinistryZipCodes.includes(state.zipCode.answer.trim())
+    ) {
+      sources.push("germantown-crisis-ministry")
+    }
   }
+
+  // Achieveability
+  if (achieveAbilityZipCodes.includes(state.zipCode.answer.trim())) {
+    if (state.westPhilly.answer === null) {
+      throw {
+        questionId: "westPhilly",
+        Component: questions.WestPhilly,
+      }
+    }
+    if (state.westPhilly.answer === "yes") {
+      sources.push("achieveability")
+    }
+  }
+
+  // Utility emergency services fund
+  if (state.isVeteran.answer === null) {
+    throw {
+      questionId: "isVeteran",
+      Component: questions.Veteran,
+    }
+  } else if (state.isVeteran.answer === "yes") {
+    sources.push("utility-emergency-services-fund")
+  }
+
+  // DHS Social work
+  if (state.involvedWithDHS.answer === null) {
+    throw {
+      questionId: "involvedWithDHS",
+      Component: questions.InvolvedWithDHS,
+    }
+  } else if (state.involvedWithDHS.answer === "yes") {
+    sources.push("dhs-support")
+  }
+
+  // Apple tree
+  if (state.receivedOHSServices.answer === null) {
+    throw {
+      questionId: "receivedOHSServices",
+      Component: questions.ReceivedOHSServices,
+    }
+  } else if (state.receivedOHSServices.answer === "no") {
+    if (state.numInHousehold.answer === null) {
+      throw {
+        questionId: "numInHousehold",
+        Component: questions.NumInHousehold,
+      }
+    }
+    if (state.monthlyIncome.answer === null) {
+      throw {
+        questionId: "monthlyIncome",
+        Component: questions.MonthlyIncome,
+      }
+    }
+    if (
+      isUnderOHSIncomeReq(
+        state.numInHousehold.answer,
+        state.monthlyIncome.answer
+      )
+    ) {
+      sources.push("apple-tree-philly")
+    }
+  }
+
+  //County Assist. office.
+  if (state.receivedCAOAssistance.answer === null) {
+    throw {
+      questionId: "receivedCAOAssistance",
+      Component: questions.ReceivedCAOServices,
+    }
+  } else if (state.receivedCAOAssistance.answer === "no") {
+    sources.push("county-assistance-office")
+  }
+
+  //Hebrew Immigrant Aid Soc.
+  if (state.isImmigrant.answer === null) {
+    throw {
+      questionId: "isImmigrant",
+      Component: questions.IsImmigrant,
+    }
+  } else if (state.isImmigrant.answer === "yes") {
+    sources.push("hebrew-immigrant-aid-society")
+  }
+
+  // Salvation Army
+  // Red cross
+  if (state.experiencedDisaster.answer === null) {
+    throw {
+      questionId: "experiencedDisaster",
+      Component: questions.ExperiencedDisaster,
+    }
+  } else if (state.experiencedDisaster.answer === "yes") {
+    sources.push("salvation-army")
+    sources.push("red-cross")
+  }
+
+  return sources
 }
+
+const achieveAbilityZipCodes = ["19139", "19143", "19104", "19151", "19131"]
+
+const germantownCrisisMinistryZipCodes = [
+  "19118",
+  "19119",
+  "19126",
+  "19138",
+  "19144",
+  "19150",
+]
 
 /**
  * Uses the global monthly_income & household_size variables to determine whether
