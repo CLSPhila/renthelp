@@ -3,7 +3,6 @@ import { Link } from "gatsby"
 import { Box, Text } from "rebass"
 import Layout from "../components/layout"
 import { PrintButton } from "../components/utility/print"
-import { Blurb as RedCross } from "../pages/service-providers/red-cross"
 
 /**
  * Explain to the user what rental assistance services they appear to be eligible for.
@@ -94,9 +93,8 @@ const NoAssistanceSourcesFound = props => {
 const getBlurb = provider => {
   switch (provider) {
     case "red-cross":
-      return <RedCross />
     default:
-      return <></>
+      return <Box>{provider}</Box>
   }
 }
 
