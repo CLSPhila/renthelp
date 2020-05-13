@@ -3,6 +3,8 @@ const path = require("path")
 
 exports.onCreateNode = ({ node, getNode, actions }) => {
   const { createNodeField } = actions
+  // TODO this should filter for the service-provier content, not all markdown,
+  // in case there's ever non-service-provider markdown content.
   if (node.internal.type === `MarkdownRemark`) {
     const slug = createFilePath({
       node,

@@ -1,3 +1,4 @@
+/* eslint-disable no-throw-literal */
 import React from "react"
 import * as questions from "./questions"
 import { navigate } from "gatsby"
@@ -145,7 +146,7 @@ const collectEligibleSources = state => {
       Component: questions.InvolvedWithDHS,
     }
   } else if (state.involvedWithDHS.answer === "yes") {
-    sources.push("dhs-support")
+    sources.push("dhs-prevention-assistance-fund")
   }
 
   // Apple tree

@@ -1,7 +1,7 @@
 import React from "react"
 import { graphql } from "gatsby"
 import { Link } from "gatsby"
-import { Box, Text } from "rebass"
+import { Box, Text, Heading } from "rebass"
 import Layout from "../components/layout"
 import { PrintButton } from "../components/utility/print"
 
@@ -80,7 +80,7 @@ const DescribeAssistanceSources = props => {
       </Text>
       <Box>
         {sources.map(s => {
-          return <ProviderBlurb key={s} provider={s} />
+          return <ProviderBlurb queryData={queryData} key={s} provider={s} />
         })}
       </Box>
     </Box>
@@ -98,17 +98,28 @@ const NoAssistanceSourcesFound = props => {
   )
 }
 
-const getBlurb = provider => {
-  switch (provider) {
-    case "red-cross":
-    default:
-      return <Box>{provider}</Box>
+const getBlurb = (provider, queryData) => {
+  const nodes = queryData.allMarkdownRemark.edges.filter(({ node }) => {
+    return node.fields.slug.includes(provider)
+  })
+  if (nodes.length !== 1) {
+    console.log(`Oops. For ${provider}, getBlurb() found:`)
+    console.log(nodes)
+    return {}
   }
+  const { node } = nodes[0]
+  return node.frontmatter
 }
 
 const ProviderBlurb = props => {
-  const { provider } = props
-  return <Box>{getBlurb(provider)}</Box>
+  const { provider, queryData } = props
+  const frontmatter = getBlurb(provider, queryData)
+  return (
+    <Box>
+      <Heading fontSize={[3, 4, 5]}>{frontmatter.title}</Heading>
+      <Text>To apply for assistance, you can {frontmatter.availability}</Text>
+    </Box>
+  )
 }
 
 export const query = graphql`
