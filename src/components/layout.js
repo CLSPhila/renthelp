@@ -30,7 +30,6 @@ const Layout = ({ children }) => {
       <Helmet>
         <meta charSet="utf-8" />
         <title>{data.site.siteMetadata.title}</title>
-        <link rel="canonical" href="http://mysite.com/example" />
       </Helmet>
       <Header siteTitle={data.site.siteMetadata.title} />
       <div
