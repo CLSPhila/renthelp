@@ -79,8 +79,8 @@ const DescribeAssistanceSources = props => {
         assistance at each organization.
       </Text>
       <Box>
-        {sources.map(s => {
-          return <ProviderBlurb queryData={queryData} key={s} provider={s} />
+        {sources.map((s, idx) => {
+          return <ProviderBlurb queryData={queryData} key={idx} provider={s} />
         })}
       </Box>
     </Box>
@@ -108,16 +108,27 @@ const getBlurb = (provider, queryData) => {
     return {}
   }
   const { node } = nodes[0]
-  return node.frontmatter
+  return node
 }
 
 const ProviderBlurb = props => {
   const { provider, queryData } = props
-  const frontmatter = getBlurb(provider, queryData)
+  const node = getBlurb(provider, queryData)
   return (
-    <Box>
-      <Heading fontSize={[3, 4, 5]}>{frontmatter.title}</Heading>
-      <Text>To apply for assistance, you can {frontmatter.availability}</Text>
+    <Box py={2}>
+      <Heading fontSize={2}>{node.frontmatter.title}</Heading>
+      <Text>To apply for help, you can {node.frontmatter.availability}</Text>
+      <Box
+        sx={{
+          p: {
+            marginBottom: 0,
+          },
+        }}
+        dangerouslySetInnerHTML={{ __html: node.excerpt }}
+      ></Box>
+      <Text px={2}>
+        <Link to={`/service-providers${node.fields.slug}`}>read more...</Link>
+      </Text>
     </Box>
   )
 }
@@ -127,6 +138,7 @@ export const query = graphql`
     allMarkdownRemark {
       edges {
         node {
+          excerpt(format: HTML)
           fields {
             slug
           }

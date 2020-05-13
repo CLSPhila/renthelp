@@ -1,7 +1,7 @@
 import React from "react"
-import { graphql } from "gatsby"
+import { graphql, Link } from "gatsby"
 import Layout from "../components/layout"
-import { Box, Text } from "rebass"
+import { Box, Heading, Text } from "rebass"
 
 /**
  * List blurbs about the different service providers.
@@ -13,9 +13,24 @@ export default ({ data }) => {
       <h1>Service Providers</h1>
       {data.allMarkdownRemark.edges.map(({ node }, idx) => {
         return (
-          <Box key={idx}>
-            <h4>{node.frontmatter.title}</h4>
-            <Text>{node.frontmatter.availability}</Text>
+          <Box py={2} key={idx}>
+            <Heading fontSize={2}>{node.frontmatter.title}</Heading>
+            <Text>
+              To apply for help, you can {node.frontmatter.availability}
+            </Text>
+            <Box
+              sx={{
+                p: {
+                  marginBottom: 0,
+                },
+              }}
+              dangerouslySetInnerHTML={{ __html: node.excerpt }}
+            ></Box>
+            <Text px={2}>
+              <Link to={`/service-providers${node.fields.slug}`}>
+                read more...
+              </Link>
+            </Text>
           </Box>
         )
       })}
@@ -28,10 +43,13 @@ export const query = graphql`
     allMarkdownRemark {
       edges {
         node {
-          id
+          excerpt(format: HTML)
           frontmatter {
             availability
             title
+          }
+          fields {
+            slug
           }
         }
       }
