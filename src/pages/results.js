@@ -12,7 +12,7 @@ export default props => {
   const { location, data } = props
   const { state } = location
   const { answers, sources } = state || {}
-  const isRenter = answers ? answers.isRenter.answer : false
+  const isRenter = answers ? answers.isRenter.answer === "yes" : false
   const rentalHousingType = answers ? answers.rentalHousingType.answer : null
   return (
     <Layout>
