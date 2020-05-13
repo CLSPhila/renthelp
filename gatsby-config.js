@@ -31,11 +31,11 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `gatsby-starter-default`,
-        short_name: `starter`,
+        name: `cls-rental-assistance-screener`,
+        short_name: `rent-help`,
         start_url: `/`,
-        background_color: `#663399`,
-        theme_color: `#663399`,
+        background_color: `#454988`,
+        theme_color: `#454988`,
         display: `minimal-ui`,
         icon: `src/images/CLS-Logo_120.png`, // This path is relative to the root of the site.
       },
@@ -48,6 +48,6 @@ module.exports = {
     },
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
-    // `gatsby-plugin-offline`,
+    `gatsby-plugin-offline`,
   ],
 }
