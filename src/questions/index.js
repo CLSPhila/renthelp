@@ -40,7 +40,7 @@ export const IsRenter = props => {
 export const SecDeposit = props => {
   return (
     <Box>
-      Are you looking for help with a security deposit or with back rent?
+      Are you looking for help with a security deposit?
       <ButtonOptionsField {...props}>
         <Button variant="secondary" key="yes" value="yes">
           Yes

@@ -81,6 +81,20 @@ export const pickQuestion = (state, dispatch) => {
       />
     )
   }
+
+  if (state.needsRentHelp.answer === null) {
+    return <questions.BackRent questionId="needsRentHelp" dispatch={dispatch} />
+  }
+
+  if (state.needsSecurityDepositHelp.answer === null) {
+    return (
+      <questions.SecDeposit
+        questionId="needsSecurityDepositHelp"
+        dispatch={dispatch}
+      />
+    )
+  }
+
   try {
     let sources = collectEligibleSources(state)
     return navigate("/results", { state: { answers: state, sources } })

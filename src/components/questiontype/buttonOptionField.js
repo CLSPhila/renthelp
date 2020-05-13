@@ -21,7 +21,18 @@ export const ButtonOptionsField = props => {
       <Flex flexWrap="wrap" mx={2}>
         {props.children.map((button, idx) => {
           return (
-            <Box key={idx} px={3} py={1}>
+            <Box
+              key={idx}
+              px={3}
+              py={1}
+              sx={{
+                button: {
+                  ":hover": {
+                    backgroundColor: "secondary",
+                  },
+                },
+              }}
+            >
               {React.cloneElement(button, { onClick: handleChange })}
             </Box>
           )

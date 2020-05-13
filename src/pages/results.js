@@ -4,7 +4,7 @@ import { Link } from "gatsby"
 import { Box, Text, Heading } from "rebass"
 import Layout from "../components/layout"
 import { PrintButton } from "../components/utility/print"
-
+import { RequiredDocumentation } from "../components/requireddocumentation"
 /**
  * Explain to the user what rental assistance services they appear to be eligible for.
  */
@@ -19,12 +19,12 @@ export default props => {
       <PrintButton />
       <Box>
         {isRenter ? (
-          <IsRenter queryData={data} sources={sources} />
+          <IsRenter answers={answers} queryData={data} sources={sources} />
         ) : (
           <IsNotRenter />
         )}
         <Box>
-          {rentalHousingType === "public" ? (
+          {rentalHousingType.answer === "public" ? (
             <Text>
               Please consider talking with your manager about a rent reduction.
             </Text>
@@ -42,10 +42,14 @@ export default props => {
  * @param {*} props
  */
 const IsRenter = props => {
-  const { sources, queryData } = props
+  const { answers, sources, queryData } = props
 
   return sources && sources.length > 0 ? (
-    <DescribeAssistanceSources queryData={queryData} sources={sources} />
+    <DescribeAssistanceSources
+      answers={answers}
+      queryData={queryData}
+      sources={sources}
+    />
   ) : (
     <NoAssistanceSourcesFound />
   )
@@ -64,25 +68,31 @@ const IsNotRenter = props => {
 }
 
 const DescribeAssistanceSources = props => {
-  const { sources, queryData } = props
+  const { answers, sources, queryData } = props
   console.log("query data:")
   console.log(queryData)
 
   return (
     <Box>
-      <Text>
-        Based on the answers you provided to our questions, we think you may be
-        able to seek rental assistance from the following organizations.
-      </Text>
-      <Text>
-        Please note that you will still need to visit and apply separately for
-        assistance at each organization.
-      </Text>
-      <Box>
-        {sources.map((s, idx) => {
-          return <ProviderBlurb queryData={queryData} key={idx} provider={s} />
-        })}
+      <Box py={[3, 4, 5]}>
+        <Heading fontSize={[3, 4, 5]}>Service providers</Heading>
+        <Text>
+          Based on the answers you provided to our questions, we think you may
+          be able to seek rental assistance from the following organizations.
+        </Text>
+        <Text>
+          Please note that you will still need to visit and apply separately for
+          assistance at each organization.
+        </Text>
+        <Box>
+          {sources.map((s, idx) => {
+            return (
+              <ProviderBlurb queryData={queryData} key={idx} provider={s} />
+            )
+          })}
+        </Box>
       </Box>
+      <RequiredDocumentation answers={answers} />
     </Box>
   )
 }
