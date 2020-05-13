@@ -4,6 +4,7 @@ export default {
     background: "#fff",
     primary: "#454988",
     secondary: "#c6941F",
+    warning: "#EBAC68",
   },
   fonts: {
     body: "system-ui, sans-serif",
