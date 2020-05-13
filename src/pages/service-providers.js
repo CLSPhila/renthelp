@@ -7,7 +7,6 @@ import { Box, Heading, Text } from "rebass"
  * List blurbs about the different service providers.
  */
 export default ({ data }) => {
-  console.log(data)
   return (
     <Layout>
       <h1>Service Providers</h1>

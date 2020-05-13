@@ -3,10 +3,18 @@ import { Box, Heading, Text } from "rebass"
 
 export const RequiredDocumentation = props => {
   const { answers } = props
+  const {
+    involvedWithDHS = { answer: null },
+    monthlyIncome = { answer: null },
+    needsRentHelp = { answer: null },
+    isVeteran = { answer: null },
+    receivedOHSServices = { answer: null },
+  } = answers || {}
+
   return (
     <Box>
       <Heading fontSize={[3, 4, 5]}>Required Documentation</Heading>
-      {answers.involvedWithDHS.answer === "yes" ? (
+      {involvedWithDHS.answer === "yes" ? (
         <Text mb={4}>
           Before applying for the DHS Prevention Assistance fund, please talk
           with your social worker.
@@ -22,7 +30,7 @@ export const RequiredDocumentation = props => {
         <li>
           Social Security cards and Birth Certificates for all household members
         </li>
-        {answers.monthlyIncome.answer > 0 ? (
+        {monthlyIncome.answer > 0 ? (
           <li>
             Proof of Income dated within last 30 days - Pay stubs (for last
             thirty days) - Employment letter (hours, pay date(s), wages/salary)
@@ -36,7 +44,7 @@ export const RequiredDocumentation = props => {
           Proof of Assets, such as bank statements or inheritance award letters
         </li>
         <li>Lease Agreement</li>
-        {answers.needsRentHelp.answer === "yes" ? (
+        {needsRentHelp.answer === "yes" ? (
           <li>
             Eviction Notice and/or Court Documents (if seeking assistance for
             back rent)
@@ -44,12 +52,8 @@ export const RequiredDocumentation = props => {
         ) : (
           <></>
         )}
-        {answers.isVeteran.answer === "yes" ? (
-          <li>Completed DD-214 Form</li>
-        ) : (
-          <></>
-        )}
-        {answers.isVeteran.answer === "yes" ? (
+        {isVeteran.answer === "yes" ? <li>Completed DD-214 Form</li> : <></>}
+        {isVeteran.answer === "yes" ? (
           <li>
             State Identification or VA medical card with picture (Identification
             is required for all individuals in the home)
@@ -57,7 +61,7 @@ export const RequiredDocumentation = props => {
         ) : (
           <></>
         )}
-        {answers.isVeteran.answer === "yes" ? (
+        {isVeteran.answer === "yes" ? (
           <li>
             Housing Crisis Documentation. For example, a 10-day Eviction Notice
             or Court Ordered Eviction Notice
@@ -66,7 +70,7 @@ export const RequiredDocumentation = props => {
           <></>
         )}
       </ul>
-      {answers.receivedOHSServices.answer === "no" ? (
+      {receivedOHSServices.answer === "no" ? (
         <OHSServicesRequiredDocs />
       ) : (
         <></>
@@ -84,7 +88,7 @@ export const RequiredDocumentation = props => {
           W-9 signed by landlord. You can find a blank copy of the W9 for your
           landlord to sign here.
         </li>
-        {answers.needsRentHelp.answer === "yes" ? (
+        {needsRentHelp.answer === "yes" ? (
           <li>
             Letter with current balance owed signed and dated by landlord (if
             seeking assistance for back rent))

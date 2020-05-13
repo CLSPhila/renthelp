@@ -2,7 +2,7 @@ module.exports = {
   siteMetadata: {
     title: `Finding Rental Assistance in Philly`,
     description: `Answer a few questions to find organizations that might help families afford rent in Philadelphia.`,
-    author: `@gatsbyjs`,
+    author: `Community Legal Services of Philadelphia`,
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
@@ -37,7 +37,7 @@ module.exports = {
         background_color: `#663399`,
         theme_color: `#663399`,
         display: `minimal-ui`,
-        icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
+        icon: `src/images/CLS-Logo_120.png`, // This path is relative to the root of the site.
       },
     },
     {

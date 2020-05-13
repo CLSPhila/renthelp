@@ -11,9 +11,9 @@ import { RequiredDocumentation } from "../components/requireddocumentation"
 export default props => {
   const { location, data } = props
   const { state } = location
-  const { answers, sources } = state
-  const isRenter = answers ? answers.isRenter : false
-  const rentalHousingType = answers ? answers.rentalHousingType : null
+  const { answers, sources } = state || {}
+  const isRenter = answers ? answers.isRenter.answer : false
+  const rentalHousingType = answers ? answers.rentalHousingType.answer : null
   return (
     <Layout>
       <PrintButton />
@@ -24,7 +24,7 @@ export default props => {
           <IsNotRenter />
         )}
         <Box>
-          {rentalHousingType.answer === "public" ? (
+          {rentalHousingType === "public" ? (
             <Text>
               Please consider talking with your manager about a rent reduction.
             </Text>
@@ -69,8 +69,6 @@ const IsNotRenter = props => {
 
 const DescribeAssistanceSources = props => {
   const { answers, sources, queryData } = props
-  console.log("query data:")
-  console.log(queryData)
 
   return (
     <Box>
@@ -108,13 +106,16 @@ const NoAssistanceSourcesFound = props => {
   )
 }
 
+/**
+ * Find the graphql node associated with a given provider.
+ * @param {string} provider
+ * @param {*} queryData
+ */
 const getBlurb = (provider, queryData) => {
   const nodes = queryData.allMarkdownRemark.edges.filter(({ node }) => {
     return node.fields.slug.includes(provider)
   })
   if (nodes.length !== 1) {
-    console.log(`Oops. For ${provider}, getBlurb() found:`)
-    console.log(nodes)
     return {}
   }
   const { node } = nodes[0]

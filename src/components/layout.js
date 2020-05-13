@@ -12,6 +12,8 @@ import Header from "./header"
 import "./layout.css"
 import { Footer } from "./footer"
 import { Box } from "rebass"
+import { Helmet } from "react-helmet"
+
 const Layout = ({ children }) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
@@ -25,6 +27,11 @@ const Layout = ({ children }) => {
 
   return (
     <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>{data.site.siteMetadata.title}</title>
+        <link rel="canonical" href="http://mysite.com/example" />
+      </Helmet>
       <Header siteTitle={data.site.siteMetadata.title} />
       <div
         style={{

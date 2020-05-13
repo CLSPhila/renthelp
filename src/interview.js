@@ -64,8 +64,6 @@ export const initialQuestions = {
 }
 
 export const pickQuestion = (state, dispatch) => {
-  console.log("Picking questions.")
-  console.log(state)
   if (state.isRenter.answer === null) {
     return <questions.IsRenter questionId="isRenter" dispatch={dispatch} />
   }
@@ -99,8 +97,6 @@ export const pickQuestion = (state, dispatch) => {
     let sources = collectEligibleSources(state)
     return navigate("/results", { state: { answers: state, sources } })
   } catch (err) {
-    console.log("Error thrown")
-    console.log(err)
     return <err.Component questionId={err.questionId} dispatch={dispatch} />
   }
 }
@@ -113,8 +109,6 @@ export const pickQuestion = (state, dispatch) => {
  */
 const collectEligibleSources = state => {
   var sources = []
-  console.log("collectEligibleSources")
-  console.log(state)
 
   // Germantown crisis ministry
   if (state.zipCode.answer === null) {
