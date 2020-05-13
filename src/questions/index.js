@@ -2,7 +2,7 @@ import React from "react"
 import { TextField } from "../components/questiontype/textfield"
 import { Box, Button } from "rebass"
 import { ButtonOptionsField } from "../components/questiontype/buttonOptionField"
-import { CheckBoxField } from "../components/questiontype/checkBoxField"
+
 export const UserName = props => {
   return (
     <Box>

@@ -1,4 +1,5 @@
 import React from "react"
+import { graphql } from "gatsby"
 import { Link } from "gatsby"
 import { Box, Text } from "rebass"
 import Layout from "../components/layout"
@@ -8,7 +9,7 @@ import { PrintButton } from "../components/utility/print"
  * Explain to the user what rental assistance services they appear to be eligible for.
  */
 export default props => {
-  const { location } = props
+  const { location, data } = props
   const { state } = location
   const { answers, sources } = state
   const isRenter = answers ? answers.isRenter : false
@@ -17,7 +18,11 @@ export default props => {
     <Layout>
       <PrintButton />
       <Box>
-        {isRenter ? <IsRenter sources={sources} /> : <IsNotRenter />}
+        {isRenter ? (
+          <IsRenter queryData={data} sources={sources} />
+        ) : (
+          <IsNotRenter />
+        )}
         <Box>
           {rentalHousingType === "public" ? (
             <Text>
@@ -37,10 +42,10 @@ export default props => {
  * @param {*} props
  */
 const IsRenter = props => {
-  const { sources } = props
+  const { sources, queryData } = props
 
   return sources && sources.length > 0 ? (
-    <DescribeAssistanceSources sources={sources} />
+    <DescribeAssistanceSources queryData={queryData} sources={sources} />
   ) : (
     <NoAssistanceSourcesFound />
   )
@@ -59,7 +64,10 @@ const IsNotRenter = props => {
 }
 
 const DescribeAssistanceSources = props => {
-  const { sources } = props
+  const { sources, queryData } = props
+  console.log("query data:")
+  console.log(queryData)
+
   return (
     <Box>
       <Text>
@@ -102,3 +110,21 @@ const ProviderBlurb = props => {
   const { provider } = props
   return <Box>{getBlurb(provider)}</Box>
 }
+
+export const query = graphql`
+  query {
+    allMarkdownRemark {
+      edges {
+        node {
+          fields {
+            slug
+          }
+          frontmatter {
+            availability
+            title
+          }
+        }
+      }
+    }
+  }
+`
